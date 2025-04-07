@@ -1,0 +1,27 @@
+﻿@model IEnumerable<EventEase.Models.Venue>
+
+@{
+    ViewData["Title"] = "Available Venues";
+}
+
+<h2>Available Venues</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Location</th>
+            <th>Capacity</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var venue in Model)
+        {
+            <tr>
+                <td>@venue.Name</td>
+                <td>@venue.Location</td>
+                <td>@venue.Capacity</td>
+            </tr>
+        }
+    </tbody>
+</table>
