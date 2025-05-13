@@ -4,14 +4,15 @@
     ViewData["Title"] = "Available Venues";
 }
 
-<h2>Available Venues</h2>
+<h1>Available Venues</h1>
 
-<table class="table">
+<table class="table table-striped">
     <thead>
         <tr>
             <th>Name</th>
             <th>Location</th>
             <th>Capacity</th>
+           
         </tr>
     </thead>
     <tbody>
@@ -21,6 +22,9 @@
                 <td>@venue.Name</td>
                 <td>@venue.Location</td>
                 <td>@venue.Capacity</td>
+                <td>
+                    
+                </td>
             </tr>
         }
     </tbody>

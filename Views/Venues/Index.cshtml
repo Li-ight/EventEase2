@@ -1,47 +1,44 @@
-﻿@model IEnumerable<Venue>
+﻿@model IEnumerable<EventEase.Models.ViewModels.VenueWithBookingCount>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Venue List";
 }
 
-<h1>Index</h1>
+<h2>Venues</h2>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+@if (TempData["VenueDeleteError"] != null)
+{
+    <div class="alert alert-warning">
+        @TempData["VenueDeleteError"]
+    </div>
+}
+
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Location)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Capacity)
-            </th>
+            <th>Name</th>
+            <th>Location</th>
+            <th>Capacity</th>
+            <th>Bookings</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Location)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Capacity)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.VenueID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.VenueID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.VenueID">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Venue.Name</td>
+                <td>@item.Venue.Location</td>
+                <td>@item.Venue.Capacity</td>
+                <td>@item.BookingCount</td>
+               
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Venue.VenueID">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Venue.VenueID">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+<a asp-action="Create" class="btn btn-primary">Add New Venue</a>

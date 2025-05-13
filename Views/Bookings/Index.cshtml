@@ -1,10 +1,10 @@
 ﻿@model IEnumerable<Booking>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Manage Bookings";
 }
 
-<h1>Index</h1>
+<h1>Manage Bookings</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -21,6 +21,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.ClientName)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VenueID)
+            </th>
             
             <th></th>
         </tr>
@@ -32,15 +35,17 @@
                 @Html.DisplayFor(modelItem => item.Event.EventID)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Venue.VenueID)
+                @Html.DisplayFor(modelItem => item.Venue.Name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ClientName)
             </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Venue.VenueID)
+                </td>
             
             <td>
                 <a asp-action="Edit" asp-route-id="@item.BookingID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.BookingID">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.BookingID">Delete</a>
             </td>
         </tr>

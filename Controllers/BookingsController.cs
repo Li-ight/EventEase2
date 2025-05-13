@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using EventEase.Data;
 using EventEase.Models;
+using EventEase.ViewModels;
 
 namespace EventEase.Controllers
 {
@@ -127,5 +128,31 @@ namespace EventEase.Controllers
         {
             return _context.Bookings.Any(e => e.BookingID == id);
         }
+        public async Task<IActionResult> BookingOverview(string searchTerm)
+        {
+            var query = _context.Bookings
+                .Include(b => b.Event)
+                .Include(b => b.Venue)
+                .Select(b => new BookingDetailsViewModel
+                {
+              
+                    ClientName = b.ClientName,
+                    EventId = b.EventID,
+                    EventName = b.Event.Title,
+                    VenueId = b.VenueID,
+                    VenueName = b.Venue.Name,
+                    VenueLocation = b.Venue.Location
+                });
+
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                query = query.Where(b => b.EventId.ToString().Contains(searchTerm) ||
+                                         b.VenueId.ToString().Contains(searchTerm));
+            }
+
+            var result = await query.ToListAsync();
+            return View(result);
+        }
+
     }
 }
