@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using EventEase.Data;
 using EventEase.Models;
 using EventEase.ViewModels;
+using EventEase.Models.ViewModels;
 
 namespace EventEase.Controllers
 {
@@ -128,31 +129,45 @@ namespace EventEase.Controllers
         {
             return _context.Bookings.Any(e => e.BookingID == id);
         }
-        public async Task<IActionResult> BookingOverview(string searchTerm)
+
+        // GET: Bookings/Filter
+        public async Task<IActionResult> Filter(string clientName, int? venueId, int? eventId, string location)
         {
             var query = _context.Bookings
                 .Include(b => b.Event)
-                .Include(b => b.Venue)
-                .Select(b => new BookingDetailsViewModel
-                {
               
+                .Select(b => new BookingDetailsFilterViewModel
+                {
+                    BookingId = b.BookingID,
                     ClientName = b.ClientName,
                     EventId = b.EventID,
                     EventName = b.Event.Title,
                     VenueId = b.VenueID,
-                    VenueName = b.Venue.Name,
-                    VenueLocation = b.Venue.Location
+                  
                 });
 
-            if (!string.IsNullOrEmpty(searchTerm))
-            {
-                query = query.Where(b => b.EventId.ToString().Contains(searchTerm) ||
-                                         b.VenueId.ToString().Contains(searchTerm));
-            }
+            if (!string.IsNullOrWhiteSpace(clientName))
+                query = query.Where(b => b.ClientName.Contains(clientName));
+
+            if (venueId.HasValue)
+                query = query.Where(b => b.VenueId == venueId.Value);
+
+            if (eventId.HasValue)
+                query = query.Where(b => b.EventId == eventId.Value);
+
+            if (!string.IsNullOrWhiteSpace(location))
+                query = query.Where(b => b.VenueLocation.Contains(location));
 
             var result = await query.ToListAsync();
+
+            ViewData["EventID"] = new SelectList(_context.Events, "EventID", "Title");
+            ViewData["VenueID"] = new SelectList(_context.Venues, "VenueID", "Name");
+
+            ViewBag.Venues = _context.Venues.ToList();
+            ViewBag.Events = _context.Events.ToList();
+
+
             return View(result);
         }
-
     }
 }

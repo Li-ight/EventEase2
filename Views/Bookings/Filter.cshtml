@@ -1,0 +1,58 @@
+﻿@model IEnumerable<EventEase.Models.ViewModels.BookingDetailsFilterViewModel>
+
+@{
+    ViewData["Title"] = "Filter Bookings";
+}
+
+<h2>Filter Bookings</h2>
+
+<form asp-action="Filter" class="form-inline mb-3" method="get">
+    <div class="form-group mr-2">
+        <input type="text" name="clientName" value="@ViewBag.ClientName" placeholder="Client Name" class="form-control" />
+    </div>
+    <div class="form-group mr-2">
+        <select name="venueId" class="form-control">
+            <option value="">-- Select Venue --</option>
+            @foreach (var v in (IEnumerable<dynamic>)ViewBag.Venues)
+            {
+                <option value="@v.VenueID">@v.Name</option>
+            }
+        </select>
+    </div>
+    <div class="form-group mr-2">
+        <select name="eventId" class="form-control">
+            <option value="">-- Select Event --</option>
+            @foreach (var e in (IEnumerable<dynamic>)ViewBag.Events)
+            {
+                <option value="@e.EventID">@e.Title</option>
+            }
+        </select>
+    </div>
+  
+    <button type="submit" class="btn btn-primary">Search</button>
+    <a asp-action="Filter" class="btn btn-secondary ml-2">Reset</a>
+</form>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Booking ID</th>
+            <th>Client Name</th>
+            <th>Event</th>
+            <th>Venue</th>
+            
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var b in Model)
+        {
+            <tr>
+                <td>@b.BookingId</td>
+                <td>@b.ClientName</td>
+                <td>@b.EventName (ID: @b.EventId)</td>
+                <td>@b.VenueName (ID: @b.VenueId)</td>
+               
+            </tr>
+        }
+    </tbody>
+</table>
